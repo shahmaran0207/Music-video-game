@@ -20,6 +20,8 @@ public class DynamicBeat extends JFrame {
 
         // 이미지 경로를 올바르게 로드
         introbackground = new ImageIcon(getClass().getClassLoader().getResource("images/intro2.jpg")).getImage();
+        Music introMusic=new Music("/music/in.mp3", true);
+        introMusic.start();
     }
 
     @Override

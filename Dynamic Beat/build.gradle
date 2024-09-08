@@ -30,6 +30,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	implementation group: 'javazoom', name: 'jlayer', version: '1.0.1'
 }
 
 tasks.named('test') {
