@@ -95,9 +95,10 @@ public class DynamicBeat extends JFrame {
             public void mousePressed(MouseEvent e){
                 Music buttonEnteredMusic =new Music("/music/buttonPressedMusic.mp3", false);
                 buttonEnteredMusic.start();
-                //게임 시작 이벤트
 
-
+                startButton.setVisible(false);
+                quitButton.setVisible(false);
+                background=new ImageIcon(Main.class.getResource("/images/mainBackground.jpg")).getImage();
             }
         });
         add(startButton);
