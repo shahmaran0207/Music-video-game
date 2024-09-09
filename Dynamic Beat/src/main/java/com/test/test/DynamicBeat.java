@@ -7,13 +7,19 @@ import java.awt.event.MouseEvent;
 
 public class DynamicBeat extends JFrame {
 
-    private Image introbackground = new ImageIcon(Main.class.getResource("/images/intro2.jpg")).getImage();
+    private Image background = new ImageIcon(Main.class.getResource("/images/intro2.jpg")).getImage();
     private JLabel menubar=new JLabel(new ImageIcon(Main.class.getResource("/images/menubar.png")));
 
     private ImageIcon exitButtonBasicImage=new ImageIcon(Main.class.getResource("/images/exitButtonBasic.png"));
     private ImageIcon exitButtonEnteredImage=new ImageIcon(Main.class.getResource("/images/exitButtonEntered.png"));
+    private ImageIcon startButtonBasicImage=new ImageIcon(Main.class.getResource("/images/startButtonBasic.png"));
+    private ImageIcon startButtonEnteredImage=new ImageIcon(Main.class.getResource("/images/startButtonEntered.png"));
+    private ImageIcon quitButtonBasicImage=new ImageIcon(Main.class.getResource("/images/quitButtonBasic.png"));
+    private ImageIcon quitButtonEnteredImage=new ImageIcon(Main.class.getResource("/images/quitButtonEntered.png"));
 
     private JButton exitButton=new JButton(exitButtonBasicImage);
+    private JButton startButton=new JButton(startButtonBasicImage);
+    private JButton quitButton=new JButton(quitButtonBasicImage);
 
     private int mouseX, mouseY;
 
@@ -66,6 +72,70 @@ public class DynamicBeat extends JFrame {
 
         add(exitButton);
 
+        startButton.setBounds(40,450,400,128);
+        startButton.setBorderPainted(false);
+        startButton.setContentAreaFilled(false);
+        startButton.setFocusPainted(false);
+        startButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e){
+                startButton.setIcon(startButtonEnteredImage);
+                startButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                Music buttonEnteredMusic =new Music("/music/buttonEnteredMusic.mp3", false);
+                buttonEnteredMusic.start();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e){
+                startButton.setIcon(startButtonBasicImage);
+                startButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e){
+                Music buttonEnteredMusic =new Music("/music/buttonPressedMusic.mp3", false);
+                buttonEnteredMusic.start();
+                //게임 시작 이벤트
+
+
+            }
+        });
+        add(startButton);
+
+        quitButton.setBounds(40,530,400,128);
+        quitButton.setBorderPainted(false);
+        quitButton.setContentAreaFilled(false);
+        quitButton.setFocusPainted(false);
+        quitButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e){
+                quitButton.setIcon(quitButtonEnteredImage);
+                quitButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                Music buttonEnteredMusic =new Music("/music/buttonEnteredMusic.mp3", false);
+                buttonEnteredMusic.start();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e){
+                quitButton.setIcon(quitButtonBasicImage);
+                quitButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e){
+                Music buttonEnteredMusic =new Music("/music/buttonPressedMusic.mp3", false);
+                buttonEnteredMusic.start();
+                try{
+                    Thread.sleep(1000);
+                } catch (Exception err){
+                    System.out.println(err.getMessage());
+                }
+                System.exit(0);
+            }
+        });
+
+        add(quitButton);
+
         menubar.setBounds(0,0,1280,30);
         menubar.addMouseListener(new MouseAdapter() {
             @Override
@@ -99,7 +169,7 @@ public class DynamicBeat extends JFrame {
     }
 
     public void screenDraw(Graphics g){
-        g.drawImage(introbackground, 0, 0, null);
+        g.drawImage(background, 0, 0, null);
         paintComponents(g);
         this.repaint();
     }
