@@ -4,12 +4,16 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 public class DynamicBeat extends JFrame {
 
-    private Image titleImage = new ImageIcon(Main.class.getResource("/images/title1.png")).getImage();
+    private Image selectedImage;
+    private Image screenImage;
+    private Image titleImage;
+
     private Image background = new ImageIcon(Main.class.getResource("/images/intro2.jpg")).getImage();
-    private Image selectedImage = new ImageIcon(Main.class.getResource("/images/image.png")).getImage();
+
     private JLabel menubar=new JLabel(new ImageIcon(Main.class.getResource("/images/menubar.png")));
 
     private ImageIcon exitButtonBasicImage=new ImageIcon(Main.class.getResource("/images/exitButtonBasic.png"));
@@ -22,20 +26,29 @@ public class DynamicBeat extends JFrame {
     private ImageIcon rightButtonEnteredImage=new ImageIcon(Main.class.getResource("/images/rightButtonEntered.png"));
     private ImageIcon leftButtonBasicImage=new ImageIcon(Main.class.getResource("/images/leftButtonBasic.png"));
     private ImageIcon leftButtonEnteredImage=new ImageIcon(Main.class.getResource("/images/lefttButtonEntered.png"));
+    private ImageIcon easyButtonBasicImage=new ImageIcon(Main.class.getResource("/images/easyButtonBasic.png"));
+    private ImageIcon easyButtonEnteredImage=new ImageIcon(Main.class.getResource("/images/easyButtonEntered.png"));
+    private ImageIcon hardButtonBasicImage=new ImageIcon(Main.class.getResource("/images/hardButtonBasic.png"));
+    private ImageIcon hardButtonEnteredImage=new ImageIcon(Main.class.getResource("/images/hardButtonEntered.png"));
 
     private JButton exitButton=new JButton(exitButtonBasicImage);
     private JButton startButton=new JButton(startButtonBasicImage);
     private JButton quitButton=new JButton(quitButtonBasicImage);
     private JButton rightButton=new JButton(rightButtonBasicImage);
     private JButton leftButton=new JButton(leftButtonBasicImage);
+    private JButton easyButton=new JButton(easyButtonBasicImage);
+    private JButton hardButton=new JButton(hardButtonBasicImage);
 
     private int mouseX, mouseY;
-
-    private Image screenImage;
+    private int nowSelected=0;
 
     private Graphics screenGraphics;
     
     private boolean isMainScreen=false;
+
+    ArrayList<Track> trackArrayList=new ArrayList<Track>();
+
+    private Music selectedMusic;
 
     public DynamicBeat(){
         setUndecorated(true);
@@ -47,6 +60,14 @@ public class DynamicBeat extends JFrame {
         setVisible(true);
         setBackground(new Color(0,0,0,0));
         setLayout(null);
+
+        Music introMusic=new Music("/music/in.mp3", true);
+        introMusic.start();
+
+        trackArrayList.add(new Track("title1.png", "sdfsdf.png", "music_is_getting_louder-wallpaper-1280x720.png",
+                "/music/flowingair.mp3", "/music/flowingair.mp3"));
+        trackArrayList.add(new Track("title2.png", "asd.png", "equal.png",
+                "/music/Days-of-joy-843433.mp3", "/music/Days-of-joy-843433.mp3"));
 
         exitButton.setBounds(1245,0,30,30);
         exitButton.setBorderPainted(false);
@@ -105,11 +126,14 @@ public class DynamicBeat extends JFrame {
             public void mousePressed(MouseEvent e){
                 Music buttonEnteredMusic =new Music("/music/buttonPressedMusic.mp3", false);
                 buttonEnteredMusic.start();
-
+                introMusic.close();
+                selectedTrack(0);
                 startButton.setVisible(false);
                 quitButton.setVisible(false);
                 leftButton.setVisible(true);
                 rightButton.setVisible(true);
+                easyButton.setVisible(true);
+                hardButton.setVisible(true);
                 background=new ImageIcon(Main.class.getResource("/images/mainBackground.jpg")).getImage();
                 isMainScreen=true;
             }
@@ -174,7 +198,7 @@ public class DynamicBeat extends JFrame {
             public void mousePressed(MouseEvent e){
                 Music buttonEnteredMusic =new Music("/music/buttonPressedMusic.mp3", false);
                 buttonEnteredMusic.start();
-                //왼쪽 버튼 이벤트
+                selectLeft();
             }
         });
 
@@ -204,11 +228,69 @@ public class DynamicBeat extends JFrame {
             public void mousePressed(MouseEvent e){
                 Music buttonEnteredMusic =new Music("/music/buttonPressedMusic.mp3", false);
                 buttonEnteredMusic.start();
-                //오른쪽 버튼 이벤트
+                selectRight();
             }
         });
 
         add(rightButton);
+
+        easyButton.setVisible(false);
+        easyButton.setBounds(375,520,256,256);
+        easyButton.setBorderPainted(false);
+        easyButton.setContentAreaFilled(false);
+        easyButton.setFocusPainted(false);
+        easyButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e){
+                easyButton.setIcon(easyButtonEnteredImage);
+                easyButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                Music buttonEnteredMusic =new Music("/music/buttonEnteredMusic.mp3", false);
+                buttonEnteredMusic.start();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e){
+                easyButton.setIcon(easyButtonBasicImage);
+                easyButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e){
+                Music buttonEnteredMusic =new Music("/music/buttonPressedMusic.mp3", false);
+                buttonEnteredMusic.start();
+            }
+        });
+
+        add(easyButton);
+
+        hardButton.setVisible(false);
+        hardButton.setBounds(655,520,256,256);
+        hardButton.setBorderPainted(false);
+        hardButton.setContentAreaFilled(false);
+        hardButton.setFocusPainted(false);
+        hardButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e){
+                hardButton.setIcon(hardButtonEnteredImage);
+                hardButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                Music buttonEnteredMusic =new Music("/music/buttonEnteredMusic.mp3", false);
+                buttonEnteredMusic.start();
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e){
+                hardButton.setIcon(hardButtonBasicImage);
+                hardButton.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e){
+                Music buttonEnteredMusic =new Music("/music/buttonPressedMusic.mp3", false);
+                buttonEnteredMusic.start();
+            }
+        });
+
+        add(hardButton);
 
 
 
@@ -232,8 +314,7 @@ public class DynamicBeat extends JFrame {
 
 
 
-        Music introMusic=new Music("/music/in.mp3", true);
-        introMusic.start();
+
     }
 
     @Override
@@ -252,5 +333,25 @@ public class DynamicBeat extends JFrame {
         }
         paintComponents(g);
         this.repaint();
+    }
+
+    public void selectedTrack(int nowSelected){
+        if(selectedMusic!=null) selectedMusic.close();
+        titleImage = new ImageIcon(Main.class.getResource("/images/"+trackArrayList.get(nowSelected).getTitleImage())).getImage();
+        selectedImage = new ImageIcon(Main.class.getResource("/images/"+trackArrayList.get(nowSelected).getStartimage())).getImage();
+        selectedMusic=new Music(trackArrayList.get(nowSelected).getStartMusic(),true);
+        selectedMusic.start();
+    }
+
+    public void selectLeft(){
+        if(nowSelected==0) nowSelected=trackArrayList.size()-1;
+        else nowSelected--;
+        selectedTrack(nowSelected);
+    }
+
+    public void selectRight(){
+        if(nowSelected==trackArrayList.size()-1) nowSelected=0;
+        else nowSelected++;
+        selectedTrack(nowSelected);
     }
 }
