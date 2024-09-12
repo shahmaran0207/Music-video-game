@@ -2,6 +2,7 @@ package com.test.test;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Game extends Thread{
     private Image gameInfoImage=new ImageIcon(Main.class.getResource("/images/gameInfo.png")).getImage();
@@ -14,9 +15,24 @@ public class Game extends Thread{
     private Image noteRouteLImage=new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
     private Image noteRouteSpace1Image=new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
     private Image noteRouteSpace2Image=new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
-    private Image noteRouteBasicImage=new ImageIcon(Main.class.getResource("/images/noteBasic.png")).getImage();
     private Image noteRoutePressedImage=new ImageIcon(Main.class.getResource("/images/noteRoutePressed.png")).getImage();
     private Image noteRouteLineImage=new ImageIcon(Main.class.getResource("/images/noteRouteLine.png")).getImage();
+
+    private String titleName;
+    private String difficulty;
+    private String musicTitle;
+    private Music gameMusic;
+
+    ArrayList<Note> noteList=new ArrayList<Note>();
+
+    public Game (String titleName, String difficulty, String musicTitle){
+        this.titleName=titleName;
+        this.difficulty=difficulty;
+        this.musicTitle=musicTitle;
+        gameMusic=new Music(this.musicTitle, false);
+        gameMusic.start();
+        dropNote(titleName);
+    }
 
     public void scrrenDraw(Graphics2D g){
         g.drawImage(noteRouteSImage, 228, 30, null);
@@ -38,19 +54,15 @@ public class Game extends Thread{
         g.drawImage(noteRouteLineImage, 1052, 30, null);
         g.drawImage(gameInfoImage, 0, 660, null);
         g.drawImage(judgementLineImage, 0, 580, null);
-        g.drawImage(noteRouteBasicImage, 228, 120, null);
-        g.drawImage(noteRouteBasicImage, 332, 580, null);
-        g.drawImage(noteRouteBasicImage, 436, 500, null);
-        g.drawImage(noteRouteBasicImage, 540, 340, null);
-        g.drawImage(noteRouteBasicImage, 640, 340, null);
-        g.drawImage(noteRouteBasicImage, 744, 325, null);
-        g.drawImage(noteRouteBasicImage, 848, 305, null);
-        g.drawImage(noteRouteBasicImage, 952, 305, null);
+        for(int i=0; i<noteList.size();i++){
+            Note note = noteList.get(i);
+            note.screenDraw(g);
+        }
         g.setColor(Color.white);
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         g.setFont(new Font("Arial", Font.BOLD, 30));
-        g.drawString("Music 1", 20, 702);
-        g.drawString("Easy", 1190, 702);
+        g.drawString(titleName, 20, 702);
+        g.drawString(difficulty, 1190, 702);
         g.setFont(new Font("Arial", Font.PLAIN, 26));
         g.setColor(Color.DARK_GRAY);
         g.drawString("S", 270, 609);
@@ -130,7 +142,16 @@ public class Game extends Thread{
     }
 
     @Override
-    public void run(){
+    public void run(){}
 
+    public void close(){
+        gameMusic.close();
+        this.interrupt();
+    }
+
+    public void dropNote(String titleName){
+        Note note=new Note(228,  "short");
+        note.start();
+        noteList.add(note);
     }
 }
