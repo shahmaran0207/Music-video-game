@@ -11,7 +11,6 @@ public class DynamicBeat extends JFrame {
     private Image selectedImage;
     private Image screenImage;
     private Image titleImage;
-
     private Image background = new ImageIcon(Main.class.getResource("/images/intro2.jpg")).getImage();
 
     private JLabel menubar=new JLabel(new ImageIcon(Main.class.getResource("/images/menubar.png")));
@@ -58,6 +57,11 @@ public class DynamicBeat extends JFrame {
     public static Game game;
 
     public DynamicBeat(){
+        trackArrayList.add(new Track("title1.png", "sdfsdf.png", "music_is_getting_louder-wallpaper-1280x720.png",
+                "/music/flowingair.mp3", "/music/flowingair.mp3", "Music1"));
+        trackArrayList.add(new Track("title2.png", "asd.png", "guitar.jpg",
+                "/music/Days-of-joy-843433.mp3", "/music/Days-of-joy-843433.mp3", "Music2"));
+
         setUndecorated(true);
         setTitle("Dynamic Beat");
         setSize(Main.SCREEN_WIDTH, Main.SCREEN_HEIGHT);
@@ -67,21 +71,15 @@ public class DynamicBeat extends JFrame {
         setVisible(true);
         setBackground(new Color(0,0,0,0));
         setLayout(null);
-
         addKeyListener(new KeyListner());
 
         introMusic.start();
-
-        trackArrayList.add(new Track("title1.png", "sdfsdf.png", "music_is_getting_louder-wallpaper-1280x720.png",
-                "/music/flowingair.mp3", "/music/flowingair.mp3", "Music1"));
-        trackArrayList.add(new Track("title2.png", "asd.png", "guitar.jpg",
-                "/music/Days-of-joy-843433.mp3", "/music/Days-of-joy-843433.mp3", "Music2"));
-
         exitButton.setBounds(1245,0,30,30);
         exitButton.setBorderPainted(false);
         exitButton.setContentAreaFilled(false);
         exitButton.setFocusPainted(false);
         exitButton.addMouseListener(new MouseAdapter() {
+
             @Override
             public void mouseEntered(MouseEvent e){
                 exitButton.setIcon(exitButtonEnteredImage);
@@ -291,7 +289,6 @@ public class DynamicBeat extends JFrame {
                 gameStart(nowSelected, "hard");
             }
         });
-
         add(hardButton);
 
         backButton.setVisible(false);
@@ -321,10 +318,7 @@ public class DynamicBeat extends JFrame {
                 backMain();
             }
         });
-
         add(backButton);
-
-
 
         menubar.setBounds(0,0,1280,30);
         menubar.addMouseListener(new MouseAdapter() {
@@ -362,6 +356,11 @@ public class DynamicBeat extends JFrame {
 
         if(isgameScreen) game.scrrenDraw(g);
         paintComponents(g);
+        try{
+            Thread.sleep(5);
+        }catch (Exception e){
+            System.err.println(e.getMessage());
+        }
         this.repaint();
     }
 
@@ -395,8 +394,9 @@ public class DynamicBeat extends JFrame {
         background=new ImageIcon(Main.class.getResource("/images/"+trackArrayList.get(nowSelected).getGameImage())).getImage();
         backButton.setVisible(true);
         isgameScreen=true;
-        setFocusable(true);
         game=new Game(trackArrayList.get(nowSelected).getTitleName(), difficulty, trackArrayList.get(nowSelected).getGameMusic());
+        game.start();
+        setFocusable(true);
     }
 
     public void backMain(){
