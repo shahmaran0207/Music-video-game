@@ -13,6 +13,17 @@ public class Note extends Thread{
 
     private boolean proceed=true;
 
+    public boolean isProceed(){
+        return proceed;
+    }
+
+    public String getNoteType(){
+        return noteType;
+    }
+
+    public void close(){
+        proceed=false;
+    }
 
 
     public Note(String noteType){
@@ -38,6 +49,10 @@ public class Note extends Thread{
 
     public void drop(){
         y+=Main.NOTE_SPEED;
+        if(y>620){
+            System.out.println("Miss");
+            close();
+        }
     }
 
     @Override
@@ -45,11 +60,43 @@ public class Note extends Thread{
         try{
             while (true){
                 drop();
-                Thread.sleep(Main.SLEEP_TIME);
+                if(proceed) Thread.sleep(Main.SLEEP_TIME);
+                else {
+                    interrupt();
+                    break;
+                }
             }
 
         } catch (Exception e){
             System.err.println(e.getMessage());
         }
+    }
+
+    public String judge(){
+        if(y>=600) {
+            System.out.println("Great");
+            close();
+            return "Great";
+        }
+        else if(y>=587) {
+            System.out.println("Perfect");
+            close();
+            return "Perfect";
+        }
+        else if(y>=573) {
+            System.out.println("Great");
+            close();
+            return "Great";
+        }
+        else if(y>=535) {
+            System.out.println("Early");
+            close();
+            return "Early";
+        }
+        return "None";
+    }
+
+    public int getY(){
+        return y;
     }
 }

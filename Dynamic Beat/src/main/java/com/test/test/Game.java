@@ -17,6 +17,8 @@ public class Game extends Thread {
     private Image noteRouteSpace2Image = new ImageIcon(Main.class.getResource("/images/noteRoute.png")).getImage();
     private Image noteRoutePressedImage = new ImageIcon(Main.class.getResource("/images/noteRoutePressed.png")).getImage();
     private Image noteRouteLineImage = new ImageIcon(Main.class.getResource("/images/noteRouteLine.png")).getImage();
+    private Image blueFlareImage;
+    private Image juidgeImage;
 
     private String titleName;
     private String difficulty;
@@ -55,7 +57,14 @@ public class Game extends Thread {
         g.drawImage(judgementLineImage, 0, 580, null);
         for (int i = 0; i < noteList.size(); i++) {
             Note note = noteList.get(i);
-            note.screenDraw(g);
+            if(!note.isProceed()) {
+                noteList.remove(i);
+                i--;
+            }
+            else{
+                note.screenDraw(g);
+            }
+
         }
         g.setColor(Color.white);
         g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -74,9 +83,11 @@ public class Game extends Thread {
         g.setColor(Color.LIGHT_GRAY);
         g.setFont(new Font("Elephant", Font.BOLD, 30));
         g.drawString("000000", 565, 702);
+        g.drawImage(blueFlareImage, 460, 420, null);
     }
 
     public void pressS() {
+        judge("S");
         noteRouteSImage = new ImageIcon(Main.class.getResource("/images/noteRoutePressed.png")).getImage();
         new Music("/music/FX_piano01.mp3", false).start();
     }
@@ -86,6 +97,7 @@ public class Game extends Thread {
     }
 
     public void pressD() {
+        judge("D");
         noteRouteDImage = new ImageIcon(Main.class.getResource("/images/noteRoutePressed.png")).getImage();
         new Music("/music/FX_piano01.mp3", false).start();
     }
@@ -95,6 +107,7 @@ public class Game extends Thread {
     }
 
     public void pressF() {
+        judge("F");
         noteRouteFImage = new ImageIcon(Main.class.getResource("/images/noteRoutePressed.png")).getImage();
         new Music("/music/FX_piano01.mp3", false).start();
     }
@@ -104,6 +117,7 @@ public class Game extends Thread {
     }
 
     public void pressJ() {
+        judge("J");
         noteRouteJImage = new ImageIcon(Main.class.getResource("/images/noteRoutePressed.png")).getImage();
         new Music("/music/FX_piano01.mp3", false).start();
     }
@@ -113,6 +127,7 @@ public class Game extends Thread {
     }
 
     public void pressL() {
+        judge("L");
         noteRouteLImage = new ImageIcon(Main.class.getResource("/images/noteRoutePressed.png")).getImage();
         new Music("/music/FX_piano01.mp3", false).start();
     }
@@ -122,6 +137,7 @@ public class Game extends Thread {
     }
 
     public void pressK() {
+        judge("K");
         noteRouteKImage = new ImageIcon(Main.class.getResource("/images/noteRoutePressed.png")).getImage();
         new Music("/music/FX_piano01.mp3", false).start();
     }
@@ -131,6 +147,7 @@ public class Game extends Thread {
     }
 
     public void pressSpace() {
+        judge("Space");
         noteRouteSpace1Image = new ImageIcon(Main.class.getResource("/images/noteRoutePressed.png")).getImage();
         noteRouteSpace2Image = new ImageIcon(Main.class.getResource("/images/noteRoutePressed.png")).getImage();
         new Music("/music/FX_piano02.mp3", false).start();
@@ -237,6 +254,23 @@ public class Game extends Thread {
                 }
             }
         }
+    }
 
+    public void judge(String input){
+        for (int i=0; i<noteList.size(); i++){
+            Note note=noteList.get(i);
+            if(input.equals(note.getNoteType())){
+                judgeEvent(note.judge());
+                break;
+            }
+        }
+    }
+
+    public void judgeEvent(String judge)
+    {
+        if(judge.equals("None")) blueFlareImage=new ImageIcon(Main.class.getResource("/images/blueflare.png")).getImage();
+        else if(judge.equals("Early")) blueFlareImage=new ImageIcon(Main.class.getResource("/images/Early.png")).getImage();
+        else if(judge.equals("Great")) blueFlareImage=new ImageIcon(Main.class.getResource("/images/Great.png")).getImage();
+        else if(judge.equals("Perfect")) blueFlareImage=new ImageIcon(Main.class.getResource("/images/Perfect.png")).getImage();
     }
 }
